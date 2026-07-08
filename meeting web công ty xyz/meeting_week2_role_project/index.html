@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hệ thống đặt lịch họp XYZ</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- MÀN HÌNH ĐĂNG NHẬP / ĐĂNG KÝ -->
+  <section id="authScreen" class="auth-screen">
+    <div class="auth-card">
+      <div class="auth-title">
+        <h1>Hệ thống đặt lịch họp</h1>
+        <p>Công ty XYZ</p>
+      </div>
+
+      <div class="auth-tabs">
+        <button id="showLoginBtn" class="auth-tab active">Đăng nhập</button>
+        <button id="showRegisterBtn" class="auth-tab">Tạo tài khoản</button>
+      </div>
+
+      <form id="loginForm" class="auth-form">
+        <h2>Đăng nhập</h2>
+
+        <label>Email</label>
+        <input type="email" id="loginEmail" placeholder="Nhập email" />
+
+        <label>Mật khẩu</label>
+        <input type="password" id="loginPassword" placeholder="Nhập mật khẩu" />
+
+        <button type="submit" class="btn primary full">Đăng nhập</button>
+
+        <div class="demo-box">
+          <strong>Tài khoản demo:</strong>
+          <p>Admin: <b>admin@xyz.com</b> / <b>123456</b></p>
+          <p>Nhân viên: <b>nhanvien@xyz.com</b> / <b>123456</b></p>
+        </div>
+      </form>
+
+      <form id="registerForm" class="auth-form hidden">
+        <h2>Tạo tài khoản nhân viên</h2>
+
+        <label>Họ tên</label>
+        <input type="text" id="registerName" placeholder="Nhập họ tên" />
+
+        <label>Email</label>
+        <input type="email" id="registerEmail" placeholder="Nhập email công ty" />
+
+        <label>Mật khẩu</label>
+        <input type="password" id="registerPassword" placeholder="Tối thiểu 6 ký tự" />
+
+        <button type="submit" class="btn primary full">Tạo tài khoản</button>
+        <p class="note">Tài khoản đăng ký mới mặc định là quyền Nhân viên.</p>
+      </form>
+
+      <div id="authMessage" class="message hidden"></div>
+    </div>
+  </section>
+
+  <!-- MÀN HÌNH CHÍNH -->
+  <section id="appScreen" class="hidden">
+    <header class="app-header">
+      <div>
+        <h1>Hệ thống đặt lịch họp XYZ</h1>
+        <p id="roleText">Vai trò: Nhân viên</p>
+      </div>
+
+      <div class="user-info">
+        <span id="currentUserText"></span>
+        <button id="logoutBtn" class="btn light">Đăng xuất</button>
+      </div>
+    </header>
+
+    <main class="container">
+      <nav id="mainMenu" class="menu"></nav>
+
+      <div id="appMessage" class="message hidden"></div>
+
+      <!-- NHÂN VIÊN: TẠO CUỘC HỌP -->
+      <section id="createMeetingPage" class="page">
+        <div class="card">
+          <h2>Tạo cuộc họp mới</h2>
+          <p class="subtitle">Nhân viên tạo cuộc họp, đặt mật khẩu phòng để người khác xin tham gia.</p>
+
+          <form id="createMeetingForm">
+            <div class="form-grid">
+              <div class="form-group">
+                <label>Tiêu đề cuộc họp <span>*</span></label>
+                <input type="text" id="meetingTitle" placeholder="Ví dụ: Họp Sprint Planning" maxlength="200" />
+              </div>
+
+              <div class="form-group">
+                <label>Phòng họp <span>*</span></label>
+                <select id="meetingRoom">
+                  <option value="">-- Chọn phòng họp --</option>
+                  <option value="Phòng họp A">Phòng họp A - 20 chỗ</option>
+                  <option value="Phòng họp B">Phòng họp B - 15 chỗ</option>
+                  <option value="Phòng họp C">Phòng họp C - 10 chỗ</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label>Thời gian bắt đầu <span>*</span></label>
+                <input type="datetime-local" id="meetingStart" />
+              </div>
+
+              <div class="form-group">
+                <label>Thời gian kết thúc <span>*</span></label>
+                <input type="datetime-local" id="meetingEnd" />
+              </div>
+
+              <div class="form-group">
+                <label>Mật khẩu tham gia <span>*</span></label>
+                <input type="text" id="meetingPass" placeholder="Ví dụ: 1234 hoặc sprint2026" />
+              </div>
+
+              <div class="form-group">
+                <label>Số lượng tối đa</label>
+                <input type="number" id="meetingCapacity" min="1" placeholder="Ví dụ: 10" />
+              </div>
+
+              <div class="form-group full">
+                <label>Nội dung cuộc họp</label>
+                <textarea id="meetingDescription" rows="4" placeholder="Nhập nội dung cuộc họp"></textarea>
+              </div>
+            </div>
+
+            <div class="actions">
+              <button type="submit" class="btn primary">Tạo cuộc họp</button>
+              <button type="button" id="resetMeetingBtn" class="btn secondary">Làm mới</button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <!-- NHÂN VIÊN: XEM CUỘC HỌP ĐANG DIỄN RA / SẮP DIỄN RA -->
+      <section id="employeeMeetingsPage" class="page hidden">
+        <div class="card">
+          <h2>Cuộc họp đang diễn ra / sắp diễn ra</h2>
+          <p class="subtitle">Nhân viên chỉ xem được các cuộc họp chưa bị hủy. Muốn tham gia phải nhập đúng mật khẩu và chờ chủ phòng duyệt.</p>
+
+          <div class="filter-bar">
+            <input type="text" id="employeeSearchInput" placeholder="Tìm theo tiêu đề hoặc phòng họp..." />
+            <button id="employeeReloadBtn" class="btn secondary">Tải lại</button>
+          </div>
+
+          <div id="employeeMeetingList" class="meeting-list"></div>
+        </div>
+      </section>
+
+      <!-- NHÂN VIÊN: YÊU CẦU CHỜ CHỦ PHÒNG DUYỆT -->
+      <section id="hostRequestsPage" class="page hidden">
+        <div class="card">
+          <h2>Yêu cầu tham gia cần duyệt</h2>
+          <p class="subtitle">Chỉ hiển thị yêu cầu của các cuộc họp do bạn tạo.</p>
+          <div id="hostRequestList" class="meeting-list"></div>
+        </div>
+      </section>
+
+      <!-- ADMIN: QUẢN LÝ CUỘC HỌP -->
+      <section id="adminMeetingsPage" class="page hidden">
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <h2>Admin - Quản lý cuộc họp</h2>
+              <p class="subtitle">Admin được xem, sửa trạng thái và xóa các cuộc họp trong hệ thống.</p>
+            </div>
+            <button id="resetDataBtn" class="btn danger-outline">Reset dữ liệu demo</button>
+          </div>
+
+          <div class="filter-bar">
+            <input type="text" id="adminSearchInput" placeholder="Tìm theo tiêu đề, phòng họp hoặc người tạo..." />
+            <select id="adminStatusFilter">
+              <option value="">Tất cả trạng thái</option>
+              <option value="Sắp diễn ra">Sắp diễn ra</option>
+              <option value="Đang diễn ra">Đang diễn ra</option>
+              <option value="Đã hoàn thành">Đã hoàn thành</option>
+              <option value="Đã hủy">Đã hủy</option>
+            </select>
+            <button id="adminReloadBtn" class="btn secondary">Tải lại</button>
+          </div>
+
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>STT</th>
+                  <th>Tiêu đề</th>
+                  <th>Phòng</th>
+                  <th>Thời gian</th>
+                  <th>Người tạo</th>
+                  <th>Người tham gia</th>
+                  <th>Trạng thái</th>
+                  <th>Thao tác</th>
+                </tr>
+              </thead>
+              <tbody id="adminMeetingTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ADMIN: QUẢN LÝ TÀI KHOẢN -->
+      <section id="adminUsersPage" class="page hidden">
+        <div class="card">
+          <h2>Admin - Quản lý tài khoản</h2>
+          <p class="subtitle">Admin xem danh sách tài khoản và khóa / mở khóa tài khoản nhân viên.</p>
+
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>STT</th>
+                  <th>Họ tên</th>
+                  <th>Email</th>
+                  <th>Vai trò</th>
+                  <th>Trạng thái</th>
+                  <th>Thao tác</th>
+                </tr>
+              </thead>
+              <tbody id="adminUserTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+  </section>
+
+  <!-- MODAL NHẬP PASS THAM GIA -->
+  <div id="joinModal" class="modal hidden">
+    <div class="modal-content small">
+      <div class="modal-header">
+        <h3>Nhập mật khẩu tham gia</h3>
+        <button id="closeJoinModalBtn" class="close-btn">&times;</button>
+      </div>
+
+      <p id="joinMeetingTitle" class="modal-subtitle"></p>
+
+      <form id="joinForm">
+        <input type="hidden" id="joinMeetingId" />
+        <label>Mật khẩu cuộc họp</label>
+        <input type="password" id="joinPasswordInput" placeholder="Nhập mật khẩu do chủ phòng cung cấp" />
+
+        <div class="actions">
+          <button type="submit" class="btn primary">Gửi yêu cầu tham gia</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL ADMIN SỬA TRẠNG THÁI -->
+  <div id="adminEditModal" class="modal hidden">
+    <div class="modal-content small">
+      <div class="modal-header">
+        <h3>Admin sửa trạng thái cuộc họp</h3>
+        <button id="closeAdminEditModalBtn" class="close-btn">&times;</button>
+      </div>
+
+      <form id="adminEditForm">
+        <input type="hidden" id="adminEditMeetingId" />
+
+        <label>Trạng thái</label>
+        <select id="adminEditStatus">
+          <option value="Sắp diễn ra">Sắp diễn ra</option>
+          <option value="Đang diễn ra">Đang diễn ra</option>
+          <option value="Đã hoàn thành">Đã hoàn thành</option>
+          <option value="Đã hủy">Đã hủy</option>
+        </select>
+
+        <div class="actions">
+          <button type="submit" class="btn primary">Lưu thay đổi</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
