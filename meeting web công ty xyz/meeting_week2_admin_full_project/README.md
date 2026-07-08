@@ -1,4 +1,4 @@
-# Hệ thống đặt lịch họp XYZ - Bản Admin đầy đủ
+# Hệ thống đặt lịch họp XYZ 
 
 ## 1. Tài khoản demo
 
