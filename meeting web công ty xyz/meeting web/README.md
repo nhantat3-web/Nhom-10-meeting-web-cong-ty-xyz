@@ -1,4 +1,4 @@
-# Hệ thống đặt lịch họp XYZ - Bản Admin đầy đủ
+# Hệ thống đặt lịch họp XYZ
 
 ## 1. Tài khoản demo
 
@@ -90,7 +90,3 @@
 2. Mở thư mục bằng Visual Studio Code.
 3. Mở file `index.html`.
 4. Có thể chạy trực tiếp hoặc dùng Live Server.
-
-## 7. Ghi chú
-
-Dữ liệu được lưu bằng LocalStorage nên phù hợp để demo bài tuần 2. Nếu muốn reset dữ liệu, có thể mở Developer Tools của trình duyệt, vào Application > LocalStorage và xóa dữ liệu của trang.
