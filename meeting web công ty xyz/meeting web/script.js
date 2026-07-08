@@ -1,9 +1,3 @@
-// =====================================================
-// HỆ THỐNG ĐẶT LỊCH HỌP XYZ - BẢN ADMIN ĐẦY ĐỦ
-// Có: đăng nhập, đăng ký, phân quyền, admin dashboard,
-// quản lý cuộc họp, duyệt yêu cầu, quản lý phòng, quản lý tài khoản.
-// Dữ liệu lưu bằng LocalStorage để dễ chạy demo.
-// =====================================================
 
 const USER_KEY = "xyz_users_v3";
 const ROOM_KEY = "xyz_rooms_v3";
